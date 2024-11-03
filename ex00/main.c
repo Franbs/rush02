@@ -6,7 +6,7 @@
 /*   By: fbanzo-s <fbanzo-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:29:46 by fbanzo-s          #+#    #+#             */
-/*   Updated: 2024/11/03 21:33:01 by fbanzo-s         ###   ########.fr       */
+/*   Updated: 2024/11/03 23:08:16 by fbanzo-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char	*getdesc(char *match, int numlen)
 {
 	char	*desc;
 	int		i;
-	char	*str;
 
 	desc = match + numlen;
 	desc = ft_skipchar(desc, ' ');
@@ -65,23 +64,50 @@ char	*getdesc(char *match, int numlen)
 	return (desc);
 }
 
-void	manejarnum(char *numstr, int numlen, int numint)
+char	*ft_strcpy(char *dest, char *src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+void	manejarnum(char *numstr, int numlen)
 {
 	char	tmp[40];
-	int		i;
 
 	if (numlen <= 2)
 	{
 		checkdec(numstr);
 	}
-	else if (numlen == 3)
+	if (numlen == 3)
 	{
 		checkcent(numstr);
 	}
-	else if (numlen == 4)
+	if (numlen > 3 && numlen <= 6)
 	{
 		checkthousand(numstr, tmp);
 	}
+}
+
+int	checkdig(char *numstr)
+{
+	int	i;
+
+	i = 0;
+	while (numstr[i] != '\0')
+	{
+		if (numstr[i] < '0' && numstr[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int	main(int ac, char **av)
@@ -90,15 +116,25 @@ int	main(int ac, char **av)
 	int		numlen;
 	int		numint;
 
-	if (ac == 2)
+	numstr = av[1];
+	numint = ft_atoi(numstr);
+	if (checkdig(numstr) != 0)
 	{
-		numstr = av[1];
-		numint = ft_atoi(numstr);
-		numlen = ft_strlen(numstr);
-		manejarnum(numstr, numlen, numint);
+		if (ac == 2)
+		{
+			numlen = ft_strlen(numstr);
+			manejarnum(numstr, numlen);
+			return (0);
+		}
+		else
+		{
+			ft_putstr("Error\n");
+			return (0);
+		}
 	}
-	else if (ac == 3)
-		return (0);
 	else
+	{
+		ft_putstr("Error\n");
 		return (0);
+	}
 }
